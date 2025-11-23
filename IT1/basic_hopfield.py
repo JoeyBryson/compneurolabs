@@ -1,7 +1,7 @@
 from math import *
 import numpy as np
 
-fancy=False ; np.random.seed(42)
+fancy=True ; np.random.seed(42)
 
 def seven_segment(pattern):
     global fancy;fancy = True

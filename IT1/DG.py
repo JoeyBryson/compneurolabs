@@ -6,7 +6,7 @@ nm = lambda x :np.linalg.norm(x)
 class Dentate_Gyrus():
     def __init__(self,pats):
         self.n = len(pats[0]); self.m = 25*len(pats[0]) # SPARSITY IS N/M for simplicity and to keep it at 0.04
-        self.W = (np.random.rand(self.n,self.m)*2 - 1).T;
+        self.W = (np.random.rand(self.n,self.m)*2 - 1).T; self.W = self.W - np.mean(self.W)
         self.pairs = []
         #processes
         self.ExDims = lambda x: self.W @ x; 
@@ -33,14 +33,14 @@ class Dentate_Gyrus():
         for i in range(len(X[:,0])):
             # print(X.shape);print(W.shape)
             W += self.hebb_up(inc[i,:])
-        np.fill_diagonal(W, 0)
+        np.fill_diagonal(W, 0); W /= self.n
         return W
     
     # COMPARE A VECTOR TO ENCODED PATTERNS
     def classify(self,vec,printval=False,printit = False):
-        ls = np.zeros(len(self.pairs))
+        ls = np.zeros(len(self.pairs));
         for i in range(len(ls)):
-            val = inb(self.pairs[i][1]);vec = inb(vec)
+            val = self.pairs[i][1]
             ls[i] = np.dot(vec , val)/(nm(vec)*nm(val)+ 1e-9)
         if printval==True:print(ls)
         if printit ==True: seven_segment(self.pairs[np.argmax(ls)][0])
