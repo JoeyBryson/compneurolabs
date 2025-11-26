@@ -55,7 +55,7 @@ E   = lambda x,W:-0.5*x.T@W@x
 class Dentate_Gyrus():
     def __init__(self,pats,):
         self.n = len(pats[0]); self.m = 10*len(pats[0])
-        self.W = (np.random.rand(self.n,self.m)*2 - 1).T;
+        self.W = (np.random.rand(self.n,self.m)*2 - 1).T
         # print(self.W.shape);
         # print(np.dot(self.W.T,self.W))
         

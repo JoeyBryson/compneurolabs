@@ -10,9 +10,15 @@ class Dentate_Gyrus():
         self.pairs = []
         #processes
         self.ExDims = lambda x: self.W @ x; 
-        self.Kwins =  lambda x: (x >= np.partition(x, -self.n)[-self.n]).astype(float)*2 - 1
-        self.hebb_up = lambda x: np.outer(x,x)
-     
+        #self.Kwins = lambda x: (x >= np.partition(x, -self.n)[-self.n]).astype(float)#changed
+        self.hebb_up = lambda x: np.outer(x, x)#changed
+
+    def Kwins(self, x):
+        idx = np.argpartition(x, -self.n)[-self.n:]   # indices of top n units
+        out = np.zeros_like(x)
+        out[idx] = 1.0
+        return out
+
     # Vector Transformation (general)
     def forward(self, x): 
         return self.Kwins(self.ExDims(x))
@@ -33,7 +39,7 @@ class Dentate_Gyrus():
         for i in range(len(X[:,0])):
             # print(X.shape);print(W.shape)
             W += self.hebb_up(inc[i,:])
-        np.fill_diagonal(W, 0); W /= self.n
+        np.fill_diagonal(W, 0); #W /= self.n changed
         return W
     
     # COMPARE A VECTOR TO ENCODED PATTERNS
@@ -45,3 +51,4 @@ class Dentate_Gyrus():
         if printval==True:print(ls)
         if printit ==True: seven_segment(self.pairs[np.argmax(ls)][0])
         return ls
+    

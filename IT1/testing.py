@@ -5,6 +5,11 @@ import sys
 
 np.random.seed(42)
 
+def sparse_recall(s, W, DG, maxiter=5):
+    for _ in range(maxiter):
+        h = W @ s
+        s = DG.Kwins(h)
+    return s
 
 # SIMPLE HOPFIELD NETWORK
 def basic_process():
@@ -14,17 +19,17 @@ def basic_process():
     # Test pattern 1 error corrects to 3
     print("test1")
     seven_segment(test1)
-    converge_energy(test1,W,printend=True,printenergy=True)
+    sparse_recall(test1,W,printend=True,printenergy=True)
     print('________')
     # Test pattern 2 error corrects to 6
     print("test2")
     seven_segment(test2)
-    converge_energy(test2,W,printend=True,printenergy=True)
+    sparse_recall(test2,W,printend=True,printenergy=True)
     print('________')
     # see what incomplete 4 corrects to 
     print("test3")
     seven_segment(test3)
-    converge_energy(test3,W,printend=True,printenergy=True)
+    sparse_recall(test3,W,printend=True,printenergy=True)
  
  # TEST SIMILARITIES BETWEEN ALL patterns when encoded.(MEASURES OVERLAP)   
 def print_sims(DG):
@@ -43,27 +48,33 @@ def DGattempt():
     print_sims(DG)
           
         
-    #Test pattern 1 error corrects to 3
-    print("\ntest1")
-    seven_segment(test1)
-    tf_test1 = DG.forward(test1)
-    out1 = converge_energy(tf_test1,W,printenergy=True)
-    DG.classify(out1,printval=True,printit=True)
+    # #Test pattern 1 error corrects to 3
+    # print("\ntest1")
+    # seven_segment(test1)
+    # tf_test1 = DG.forward(test1)
+    # out1 = sparse_recall(tf_test1,W,DG)
+    # DG.classify(out1,printval=True,printit=True)
     
-    # Test pattern 2 error corrects to 6
-    print("\ntest2")
-    seven_segment(test2)
-    tf_test2 = DG.forward(test2)
-    out2 = converge_energy(tf_test2,W,printenergy=True)
-    DG.classify(out2,printval=True,printit=True)
+    # # Test pattern 2 error corrects to 6
+    # print("\ntest2")
+    # seven_segment(test2)
+    # tf_test2 = DG.forward(test2)
+    # out2 = sparse_recall(tf_test2,W,DG)
+    # DG.classify(out2,printval=True,printit=True)
     
-    # see what incomplete 4 corrects to 
-    print("\ntest3")
-    seven_segment(test3)
-    tf_test3 = DG.forward(test3)
-    out3 = converge_energy(tf_test3,W,printenergy=True)
-    DG.classify(out3,printval=True,printit=True)
+    # # see what incomplete 4 corrects to 
+    # print("\ntest3")
+    # seven_segment(test3)
+    # tf_test3 = DG.forward(test3)
+    # out3 = sparse_recall(tf_test3,W,DG)
+    # DG.classify(out3,printval=True,printit=True)
     
+    for i in range(16):
+        print("\ntest"+str(i))
+        seven_segment(all_pats[i])
+        tf_test = DG.forward(all_pats[i])
+        out = sparse_recall(tf_test,W,DG)
+        DG.classify(out,printval=True,printit=True)
 
 if __name__ =='__main__':
     # basic_process()

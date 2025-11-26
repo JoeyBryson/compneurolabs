@@ -42,7 +42,7 @@ hexdigits = np.int8([\
     [1,1,0,1,1,0,0, 1,1,1,1]])*2-1
 
 zero, one, two, three, four, five, six, seven, eight, nine, hexA, hexB, hexC, hexD, hexE, hexF = hexdigits
-all_pats = np.array([zero,one, two, three, four, five, six, seven, eight, nine, hexA, hexB, hexC, hexD, hexE, hexF]);
+all_pats = np.array([zero, one, two, three, four, five, six, seven, eight, nine, hexA, hexB, hexC, hexD, hexE, hexF]);
 
 test1 = np.int8([1,-1,1,1,-1,1,1,-1,-1,-1,-1])
 test2 = np.int8([1,1,1,1,1,1,1,-1,-1,-1,-1])
@@ -56,12 +56,14 @@ base_weights = lambda X: (X.T@X/X.shape[0])-np.eye(X.shape[1])
 
 
 def converge_energy(s,W,maxiter=20,printend=False,printenergy=False):
+    #s = 2*s - 1
     previous_energy = E(s,W)
     for i in range(maxiter):
         if printenergy: print('iteration %2d: E = %6.2f'%(i,previous_energy))
         s = sgn(W@s); energy = E(s,W)
         if energy>=previous_energy: break
         previous_energy = energy
+    # s = (s + 1)/2
     if printend: seven_segment(s); print(previous_energy); print()
     return s
 
